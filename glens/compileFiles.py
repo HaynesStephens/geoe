@@ -22,7 +22,7 @@ def compileFeedback(n):
     print(savename)
     # da.to_netcdf(savename)
     # print('ARRAY SAVED\n')
-    return da, savedir
+    return da, savename
 
 def compileControl():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
@@ -39,5 +39,5 @@ def compileControl():
         da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
     return True
 
-# compileFeedback(3)
+# da, savename = compileFeedback(3)
 # compileControl()
