@@ -18,7 +18,9 @@ def compileFeedback(n):
     da = xr.concat([xr.open_dataset(name)['PRECT'] for name in filenames], dim='time')
     savedir = '/glade/u/home/hayness/glens/custom'
     print('SAVING ARRAY')
-    # da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
+    savename = '{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end)
+    print(savename)
+    # da.to_netcdf(savename)
     # print('ARRAY SAVED\n')
     return da
 
