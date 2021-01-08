@@ -19,7 +19,7 @@ def compileFeedback():
         print('SAVING ARRAYS')
         [da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])) for da, name in zip(ds, filenames)]
         print('ARRAYS SAVED\n')
-    return True
+    return ds, filenames
 
 def compileRCP():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
