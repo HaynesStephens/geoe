@@ -51,6 +51,5 @@ def compileControl():
         da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
     return True
 
-da, savename = compileFeedback(1)
-da.to_netcdf(savename)
-# compileControl()
+if __name__ == '__main__':
+    compileFeedback()
