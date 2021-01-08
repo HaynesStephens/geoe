@@ -16,7 +16,7 @@ def compileFeedback(n):
     end   = filenames[-1].split('-')[-1].split('.')[0]
     print('LOADING ARRAY')
     da = xr.concat([xr.open_dataset(name)['PRECT'] for name in filenames], dim='time')
-    savedir = '/glade/u/home/hayness/glens/custom'
+    savedir = '/glade/work/hayness/glens/custom'
     print('SAVING ARRAY')
     da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
     print('ARRAY SAVED\n')
