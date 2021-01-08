@@ -16,7 +16,7 @@ def compileFeedback():
         filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
         filenames.sort()
         for name in filenames:
-            da = xr.open_dataset(name)['PRECT'
+            da = xr.open_dataset(name)['PRECT']
             print('SAVING ARRAY')
             da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])
             print('ARRAYS SAVED\n')
