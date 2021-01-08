@@ -55,4 +55,11 @@ def compileControl():
     return True
 
 if __name__ == "__main__":
-    ds, filenames = compileFeedback()
+    filedir = '/glade/u/home/hayness/glens/feedback'
+    da = xr.open_dataset(filedir+'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.cam.h3.PRECT.20300101-20391231.nc')['PRECT']
+    prect = da.values
+    lon = da.lon.values
+    time = da.time.values
+    lat = da.lat.values
+    new = xr.DataArray(prect, coords={'time': time, 'lat': lat, 'lon': lon}, dims=['time', 'lat', 'lon'])
+    new.to_netcdf(filedir+'test.nc')
