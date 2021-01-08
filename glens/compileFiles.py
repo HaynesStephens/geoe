@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def compileFeedback(n):
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.'
-    filedir = '/glade/u/home/hayness/glens/feedback'
+    filedir = '/glade/work/hayness/glens/feedback'
     n_member = str(n).zfill(3)
     print(n_member)
     print('LOADING FILES')
