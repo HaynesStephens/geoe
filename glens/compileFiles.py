@@ -17,7 +17,7 @@ def compileFeedback():
         ds = [xr.open_dataset(name)['PRECT'] for name in filenames]
         savedir = '/glade/u/home/hayness/glens/custom/prect'
         print('SAVING ARRAYS')
-        [da.to_netcdf('{0}/{1}'.format(savedir, name)) for da, name in zip(ds, filenames)]
+        [da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])) for da, name in zip(ds, filenames)]
         print('ARRAYS SAVED\n')
     return True
 
