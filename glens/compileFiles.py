@@ -20,7 +20,8 @@ def compileFeedback():
             savename = name.split('/')[-1]
             print('Saving: {0}'.format(savename))
             da.to_netcdf('{0}/{1}'.format(savedir, savename))
-            print('ARRAYS SAVED\n')
+            print('Saved.')
+        print('\n')
     return True
 
 def compileRCP():
