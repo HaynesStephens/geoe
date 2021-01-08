@@ -4,27 +4,25 @@ from glob import glob
 import matplotlib
 import matplotlib.pyplot as plt
 
-def compileFeedback():
+def compileFeedback(n):
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.'
     filedir = '/glade/u/home/hayness/glens/feedback'
-    savedir = '/glade/u/home/hayness/glens/custom/prect'
-    ensemble_members = np.arange(2, 4)
-    for n_member in ensemble_members:
-        n_member = str(n_member).zfill(3)
-        print(n_member)
-        print('LOADING FILES')
-        filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
-        filenames.sort()
-        for name in filenames[6:]:
-            da = xr.open_dataset(name)['PRECT']
-            savename = name.split('/')[-1]
-            print('Saving: {0}'.format(savename))
-            da.to_netcdf('{0}/{1}'.format(savedir, savename))
-            print('Saved.')
-        print('\n')
-    return True
+    n_member = str(n).zfill(3)
+    print(n_member)
+    print('LOADING FILES')
+    filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
+    filenames.sort()
+    start = filenames[0].split('-')[0].split('.')[-1]
+    end   = filenames[-1].split('-')[-1].split('.')[0]
+    print('LOADING ARRAY')
+    da = xr.concat([xr.open_dataset(name)['PRECT'] for name in filenames], dim='time')
+    savedir = '/glade/u/home/hayness/glens/custom'
+    print('SAVING ARRAY')
+    # da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
+    # print('ARRAY SAVED\n')
+    return da
 
-def compileRCP():
+def compileControl():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
     filedir = '/glade/collections/glens/Control/atm/proc/tseries/daily/PRECT'
     ensemble_members = np.arange(1,21)
@@ -39,27 +37,6 @@ def compileRCP():
         da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
     return True
 
-def compileControl():
-    prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
-    filedir = '/glade/collections/glens/Control/atm/proc/tseries/daily/PRECT'
-    ensemble_members = np.arange(4,21)
-    for n_member in ensemble_members:
-        n_member = str(n_member).zfill(3)
-        filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
-        filenames.sort()
-        start = filenames[0].split('-')[0].split('.')[-1]
-        end = filenames[-1].split('-')[-1].split('.')[0]
-        da = xr.concat([xr.open_dataset(name)['PRECT'] for name in filenames], dim='time')
-        savedir = '/glade/u/home/hayness/glens/custom'
-        da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
-    return True
-
 if __name__ == "__main__":
-    filedir = '/glade/u/home/hayness/glens/feedback'
-    da = xr.open_dataset(filedir+'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.cam.h3.PRECT.20300101-20391231.nc')['PRECT']
-    prect = da.values
-    lon = da.lon.values
-    time = da.time.values
-    lat = da.lat.values
-    new = xr.DataArray(prect, coords={'time': time, 'lat': lat, 'lon': lon}, dims=['time', 'lat', 'lon'])
-    new.to_netcdf(filedir+'test.nc')
+    compileFeedback(1)
+    # compileControl()
