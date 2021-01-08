@@ -18,9 +18,9 @@ def compileFeedback(n):
     da = xr.concat([xr.open_dataset(name)['PRECT'] for name in filenames], dim='time')
     savedir = '/glade/u/home/hayness/glens/custom'
     print('SAVING ARRAY')
-    # da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
-    # print('ARRAY SAVED\n')
-    return da
+    da.to_netcdf('{0}/{1}{2}.PRECT.{3}-{4}.nc'.format(savedir, prefix, n_member, start, end))
+    print('ARRAY SAVED\n')
+    return True
 
 def compileControl():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
