@@ -15,7 +15,7 @@ def compileFeedback():
         print('LOADING FILES')
         filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
         filenames.sort()
-        for name in filenames:
+        for name in filenames[6:]:
             da = xr.open_dataset(name)['PRECT']
             savename = name.split('/')[-1]
             print('Saving: {0}'.format(savename))
