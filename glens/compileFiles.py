@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 def compileFeedback():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.'
     filedir = '/glade/u/home/hayness/glens/feedback'
+    savedir = '/glade/u/home/hayness/glens/custom/prect'
     ensemble_members = np.arange(1, 4)
     for n_member in ensemble_members:
         n_member = str(n_member).zfill(3)
@@ -14,12 +15,12 @@ def compileFeedback():
         print('LOADING FILES')
         filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
         filenames.sort()
-        ds = [xr.open_dataset(name)['PRECT'] for name in filenames]
-        savedir = '/glade/u/home/hayness/glens/custom/prect'
-        print('SAVING ARRAYS')
-        [da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])) for da, name in zip(ds, filenames)]
-        print('ARRAYS SAVED\n')
-    return ds, filenames
+        for name in filenames:
+            da = xr.open_dataset(name)['PRECT'
+            print('SAVING ARRAY')
+            da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])
+            print('ARRAYS SAVED\n')
+    return True
 
 def compileRCP():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
