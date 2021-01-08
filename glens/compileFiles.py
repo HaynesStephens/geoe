@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def compileFeedback():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.'
     filedir = '/glade/u/home/hayness/glens/feedback'
-    ensemble_members = np.arange(1, 3)
+    ensemble_members = np.arange(1, 4)
     for n_member in ensemble_members:
         n_member = str(n_member).zfill(3)
         print(n_member)
