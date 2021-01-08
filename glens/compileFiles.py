@@ -14,12 +14,12 @@ def compileFeedback():
         print('LOADING FILES')
         filenames = glob('{0}/{1}{2}*.nc'.format(filedir, prefix, n_member))
         filenames.sort()
-        ds = [xr.open_dataset(name)['PRECT'] for name in filenames]
-        savedir = '/glade/u/home/hayness/glens/custom/prect'
-        print('SAVING ARRAYS')
-        [da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])) for da, name in zip(ds, filenames)]
-        print('ARRAYS SAVED\n')
-    return True
+        # ds = [xr.open_dataset(name)['PRECT'] for name in filenames]
+        # savedir = '/glade/u/home/hayness/glens/custom/prect'
+        # print('SAVING ARRAYS')
+        # [da.to_netcdf('{0}/{1}'.format(savedir, name.split('/')[-1])) for da, name in zip(ds, filenames)]
+        # print('ARRAYS SAVED\n')
+    return filenames
 
 def compileRCP():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
