@@ -18,10 +18,8 @@ def compileFeedback():
         savedir = '/glade/u/home/hayness/glens/custom/prect'
         print('SAVING ARRAYS')
         [da.to_netcdf(name) for da,name in zip(ds, filenames)]
-        print(savename)
-        # da.to_netcdf(savename)
-        # print('ARRAY SAVED\n')
-    return da, savename
+        print('ARRAYS SAVED\n')
+    return True
 
 def compileRCP():
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
