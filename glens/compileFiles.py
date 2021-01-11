@@ -38,5 +38,6 @@ def compileControl():
     return True
 
 if __name__ == "__main__":
-    compileFeedback(1)
+    for i in range (2,4):
+        compileFeedback(i)
     # compileControl()
