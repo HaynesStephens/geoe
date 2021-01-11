@@ -31,6 +31,6 @@ def compileControl(n):
     return compileFiles(n, prefix, filedir)
 
 if __name__ == "__main__":
-    for i in range (1,21):
+    for i in range (14,21):
         compileControl(i)
     # compileControl()
