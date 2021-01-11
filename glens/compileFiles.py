@@ -25,7 +25,7 @@ def compileFeedback(n):
     filedir = '/glade/work/hayness/glens/feedback'
     return compileFiles(n, prefix, filedir)
 
-def compileControl():
+def compileControl(n):
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
     filedir = '/glade/collections/glens/Control/atm/proc/tseries/daily/PRECT'
     return compileFiles(n, prefix, filedir)
