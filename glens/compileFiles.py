@@ -62,6 +62,4 @@ def cropFiles(region):
 
 
 if __name__ == "__main__":
-    for i in range (14,21):
-        compileControl(i)
-    # compileControl()
+    cropFiles('SoAs')
