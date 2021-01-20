@@ -127,5 +127,5 @@ if __name__ == "__main__":
     # for region in regions:
     #     for scen in scens:
     region = 'SoAs'
-    scen   = 'rcp'
+    scen   = 'feedback'
     getEnsembleMean(scen, region)
