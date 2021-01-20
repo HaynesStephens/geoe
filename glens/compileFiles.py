@@ -30,6 +30,24 @@ def compileControl(n):
     filedir = '/glade/collections/glens/Control/atm/proc/tseries/daily/PRECT'
     return compileFiles(n, prefix, filedir)
 
+def loadAndShift(filename):
+    print('Loading')
+    da = xr.open_dataarray(filename)
+    da = da.assign_coords(lon=(((da.lon + 180) % 360) - 180))
+    da = da.sortby(da.lon)
+    return da
+
+def getSouthAsia(da):
+    print('Cropping')
+    da = da.sel(lat=slice(-10,40), lon=slice(40, 140), time=slice('2010', '2030'))  # Select the region
+    da = da.sel(time=da.time.dt.month.isin([6, 7, 8])).resample(time='1A').mean()   # Get JJA average rainfall
+    return da
+
+def getWestAfrica(da):
+    da = da.sel(lat=slice(-20,20), lon=slice(-20, 20))  # Select the region
+    da = da.sel(time=da.time.dt.month.isin([6, 7, 8, 9, 10])).resample(time='1A').mean()   # Get JOSA average rainfall
+    return da
+
 if __name__ == "__main__":
     for i in range (14,21):
         compileControl(i)
