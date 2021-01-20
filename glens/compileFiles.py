@@ -37,17 +37,14 @@ def loadAndShift(filename):
     da = da.sortby(da.lon)
     return da
 
-def getSouthAsia(filename):
+def cropRegion(filename, region, lats=None, lons=None):
+    coords = {'SoAs':[(-10, 40), (40, 140)], 'WeAf':[(-20, 20), (20, 20)]}
+    if (lats==None) & (lons==None):
+        lats, lons = coords[region]
+    print('Loading')
     da = loadAndShift(filename)
     print('Cropping')
-    da = da.sel(lat=slice(-10,40), lon=slice(40, 140), time=slice('2010', '2030'))  # Select the region
-    da = da.sel(time=da.time.dt.month.isin([6, 7, 8])).resample(time='1A').mean()   # Get JJA average rainfall
-    return da
-
-def getWestAfrica(filename):
-    da = loadAndShift(filename)
-    da = da.sel(lat=slice(-20,20), lon=slice(-20, 20))  # Select the region
-    da = da.sel(time=da.time.dt.month.isin([6, 7, 8, 9, 10])).resample(time='1A').mean()   # Get JOSA average rainfall
+    da = da.sel(lat=slice(lats[0], lats[1]), lon=slice(lons[0], lons[1]))  # Select the region
     return da
 
 if __name__ == "__main__":
