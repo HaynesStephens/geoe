@@ -46,6 +46,15 @@ def cropRegion(da, region, lats=None, lons=None):
     return da
 
 
+def cropSoAs():
+    filedir = '/glade/work/hayness/glens/custom'
+    filenames = glob('{0}/*.nc'.format(filedir))
+    for filename in filenames:
+        da = xr.open_dataarray(filename)
+        da = cropRegion(da, 'SoAs')
+        savename = filedir + '/SoAs/' + filename.split('/')[-1] + '_SoAs.nc'
+        da.to_netcdf(savename)
+
 
 if __name__ == "__main__":
     for i in range (14,21):
