@@ -122,10 +122,6 @@ def getEnsembleMean(scen, region=None):
 
 
 if __name__ == "__main__":
-    # regions = ['SoAs', 'WeAf']
-    # scens = ['control', 'rcp', 'feedback']
-    # for region in regions:
-    #     for scen in scens:
-    region = 'SoAs'
-    scen   = 'feedback'
+    region = 'WeAf'
+    scen   = 'control'
     getEnsembleMean(scen, region)
