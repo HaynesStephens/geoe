@@ -63,6 +63,7 @@ def cropFiles(region):
 
 
 def getEnsembleMean(scen, region=None):
+    filedir = '/glade/work/hayness/glens/custom'
     con_files = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.001.PRECT.20100101-20990630.',
                  'b.e15.B5505C5WCCML45BGCR.f09_g16.control.002.PRECT.20100101-20980811.',
                  'b.e15.B5505C5WCCML45BGCR.f09_g16.control.003.PRECT.20100101-21000630.',
@@ -102,14 +103,21 @@ def getEnsembleMean(scen, region=None):
     start, end = year_dict[scen]
     savename = savename_dict[scen]
     if region != None:
+        filedir = filedir + '/' + region
         filenames = ['{0}{1}.nc'.format(name, region) for name in filenames]
         savename = '{0}{1}.nc'.format(savename, region)
     else:
         filenames = ['{0}nc'.format(name) for name in filenames]
         savename = '{0}nc'.format(savename)
+    filenames = ['{0}/{1}'.format(filedir, name) for name in filenames]
+    savename  = '{0}/{1}'.format(filedir, savename)
     da = xr.merge([xr.open_dataarray(name).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, name in enumerate(filenames)])
     da.to_netcdf(savename)
 
 
 if __name__ == "__main__":
-    cropFiles('WeAf')
+    regions = ['SoAs', 'WeAf']
+    scens = ['control', 'rcp', 'feedback']
+    for region in regions:
+        for scen in scens:
+            getEnsembleMean(scen, region)
