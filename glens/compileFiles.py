@@ -92,10 +92,16 @@ def getEnsembleMean(case, region=None):
     file_dict = {'control':con_files,
                  'rcp': rcp_files,
                  'feedback': geo_files}
+    year_dict = {'control': ('2010', '2030'),
+                 'rcp': ('2010', '2100'),
+                 'feedback': ('2020', '2099')}
+    start, end = year_dict[case]
     filenames = file_dict[case]
     if region != None:
         filenames = ['{0}{1}.nc'.format(name, region) for name in filenames]
-    da = xr.merge([xr.open_dataarray(path).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, path in enumerate(paths)])
+    else:
+        filenames = ['{0}nc'.format(name) for name in filenames]
+    da = xr.merge([xr.open_dataarray(name).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, name in enumerate(filenames)])
     da = da.mean(dim='case')
     da.to_netcdf()
 
