@@ -123,5 +123,5 @@ def getEnsembleMean(scen, region=None):
 
 if __name__ == "__main__":
     region = 'WeAf'
-    scen   = 'control'
+    scen   = 'rcp'
     getEnsembleMean(scen, region)
