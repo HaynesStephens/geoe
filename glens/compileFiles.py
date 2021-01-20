@@ -123,5 +123,7 @@ def getEnsembleMean(scen, region=None):
 
 if __name__ == "__main__":
     region = 'WeAf'
-    scen   = 'rcp'
-    getEnsembleMean(scen, region)
+    cropFiles(region)
+
+    # scen   = 'rcp'
+    # getEnsembleMean(scen, region)
