@@ -49,7 +49,7 @@ def cropRegion(da, region, lats=None, lons=None):
 
 def cropFiles(region):
     filedir = '/glade/work/hayness/glens/custom'
-    filenames = glob('{0}/*.nc'.format(filedir))
+    filenames = sorted(glob('{0}/*.nc'.format(filedir)))
     for filename in filenames:
         print('Loading:')
         print(filename)
