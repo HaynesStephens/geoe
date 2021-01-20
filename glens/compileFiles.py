@@ -36,7 +36,7 @@ def compileControl(n):
 
 
 def cropRegion(da, region, lats=None, lons=None):
-    coords = {'SoAs':[(-10, 40), (40, 140)], 'WeAf':[(-20, 20), (20, 20)]}
+    coords = {'SoAs':[(-10, 40), (40, 140)], 'WeAf':[(-20, 20), (-20, 20)]}
     if (lats==None) & (lons==None):
         lats, lons = coords[region]
     print('Shifting')
