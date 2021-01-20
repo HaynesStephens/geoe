@@ -38,10 +38,10 @@ def cropRegion(da, region, lats=None, lons=None):
     coords = {'SoAs':[(-10, 40), (40, 140)], 'WeAf':[(-20, 20), (20, 20)]}
     if (lats==None) & (lons==None):
         lats, lons = coords[region]
-    print('Load + Shift')
+    print('Shifting')
     da = da.assign_coords(lon=(((da.lon + 180) % 360) - 180))
     da = da.sortby(da.lon)
-    print('Crop')
+    print('Cropping')
     da = da.sel(lat=slice(lats[0], lats[1]), lon=slice(lons[0], lons[1]))  # Select the region
     return da
 
@@ -51,12 +51,15 @@ def cropSoAs():
     filedir = '/glade/work/hayness/glens/custom'
     filenames = glob('{0}/*.nc'.format(filedir))
     for filename in filenames:
+        print('Loading:')
+        print(filename)
         da = xr.open_dataarray(filename)
         da = cropRegion(da, region)
         savename = filedir + '/{0}/'.format(region) + filename.split('/')[-1][:-2] + '{0}.nc'.format(region)
         print('Saving:')
         print(savename)
         da.to_netcdf(savename)
+        print('Saved! \n')
 
 
 if __name__ == "__main__":
