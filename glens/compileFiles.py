@@ -46,8 +46,7 @@ def cropRegion(da, region, lats=None, lons=None):
     return da
 
 
-def cropSoAs():
-    region = 'SoAs'
+def cropFiles(region):
     filedir = '/glade/work/hayness/glens/custom'
     filenames = glob('{0}/*.nc'.format(filedir))
     for filename in filenames:
