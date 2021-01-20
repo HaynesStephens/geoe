@@ -50,16 +50,22 @@ def cropRegion(da, region, lats=None, lons=None):
 def cropFiles(region):
     filedir = '/glade/work/hayness/glens/custom'
     filenames = sorted(glob('{0}/*.nc'.format(filedir)))
+    already_done = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.010.PRECT.20100101-20301231.nc',
+                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.012.PRECT.20100101-20301231.nc',
+                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.016.PRECT.20100101-20301231.nc',
+                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.017.PRECT.20100101-20301231.nc',
+                    'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.PRECT.20200101-20991231.nc']
     for filename in filenames:
-        print('Loading:')
-        print(filename)
-        da = xr.open_dataarray(filename)
-        da = cropRegion(da, region)
-        savename = filedir + '/{0}/'.format(region) + filename.split('/')[-1][:-2] + '{0}.nc'.format(region)
-        print('Saving:')
-        print(savename)
-        da.to_netcdf(savename)
-        print('Saved! \n')
+        if filename not in already_done:
+            print('Loading:')
+            print(filename)
+            da = xr.open_dataarray(filename)
+            da = cropRegion(da, region)
+            savename = filedir + '/{0}/'.format(region) + filename.split('/')[-1][:-2] + '{0}.nc'.format(region)
+            print('Saving:')
+            print(savename)
+            da.to_netcdf(savename)
+            print('Saved! \n')
 
 
 def getEnsembleMean(scen, region=None):
