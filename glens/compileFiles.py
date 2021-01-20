@@ -95,15 +95,21 @@ def getEnsembleMean(case, region=None):
     year_dict = {'control': ('2010', '2030'),
                  'rcp': ('2010', '2100'),
                  'feedback': ('2020', '2099')}
-    start, end = year_dict[case]
+    savename_dict = {'control': 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.ensemble.PRECT.20100101-20301231.',
+                     'rcp': 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.ensemble.PRECT.20100101-21000630.',
+                     'feedback': 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.ensemble.PRECT.20200101-20991231.'}
     filenames = file_dict[case]
+    start, end = year_dict[case]
+    savename = savename_dict[case]
     if region != None:
         filenames = ['{0}{1}.nc'.format(name, region) for name in filenames]
+        savename = '{0}{1}.nc'.format(savename, region)
     else:
         filenames = ['{0}nc'.format(name) for name in filenames]
+        savename = '{0}nc'.format(savename)
     da = xr.merge([xr.open_dataarray(name).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, name in enumerate(filenames)])
     da = da.mean(dim='case')
-    da.to_netcdf()
+    da.to_netcdf(savename)
 
 
 if __name__ == "__main__":
