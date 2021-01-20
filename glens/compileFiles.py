@@ -92,7 +92,7 @@ def getEnsembleMean(scen, region=None):
     file_dict = {'control':con_files,
                  'rcp': rcp_files,
                  'feedback': geo_files}
-    year_dict = {'control': ('2010', '2030'),
+    year_dict = {'control': s,
                  'rcp': ('2010', '2100'),
                  'feedback': ('2020', '2099')}
     savename_dict = {'control': 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.ensemble.PRECT.20100101-20301231.',
@@ -108,7 +108,6 @@ def getEnsembleMean(scen, region=None):
         filenames = ['{0}nc'.format(name) for name in filenames]
         savename = '{0}nc'.format(savename)
     da = xr.merge([xr.open_dataarray(name).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, name in enumerate(filenames)])
-    da = da.mean(dim='case')
     da.to_netcdf(savename)
 
 
