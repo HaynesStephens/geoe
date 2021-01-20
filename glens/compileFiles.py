@@ -1,6 +1,7 @@
 import numpy as np
 import xarray as xr
 from glob import glob
+import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 
@@ -59,6 +60,14 @@ def cropFiles(region):
         print(savename)
         da.to_netcdf(savename)
         print('Saved! \n')
+
+
+def getEnsembleMean():
+    ds = xr.DataArray(dims=['ensemble', 'time', 'lat', 'lon'],
+                      coords = {'ensemble':np.arange(N),
+                                'time':da.time,
+                                'lat':da.lat,
+                                'lon':da.lon})
 
 
 if __name__ == "__main__":
