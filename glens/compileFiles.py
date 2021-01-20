@@ -62,12 +62,42 @@ def cropFiles(region):
         print('Saved! \n')
 
 
-def getEnsembleMean():
-    ds = xr.DataArray(dims=['ensemble', 'time', 'lat', 'lon'],
-                      coords = {'ensemble':np.arange(N),
-                                'time':da.time,
-                                'lat':da.lat,
-                                'lon':da.lon})
+def getEnsembleMean(case, region=None):
+    con_files = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.001.PRECT.20100101-20990630.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.002.PRECT.20100101-20980811.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.003.PRECT.20100101-21000630.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.004.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.005.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.006.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.007.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.008.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.009.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.010.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.011.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.012.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.013.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.014.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.015.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.016.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.017.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.018.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.019.PRECT.20100101-20301231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.020.PRECT.20100101-20301231.']
+    rcp_files = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.001.PRECT.20100101-20990630.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.002.PRECT.20100101-20980811.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.003.PRECT.20100101-21000630.']
+    geo_files = ['b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.PRECT.20200101-20991231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.002.PRECT.20200101-20991231.',
+                 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.003.PRECT.20200101-20991231.']
+    file_dict = {'control':con_files,
+                 'rcp': rcp_files,
+                 'feedback': geo_files}
+    filenames = file_dict[case]
+    if region != None:
+        filenames = ['{0}{1}.nc'.format(name, region) for name in filenames]
+    da = xr.merge([xr.open_dataarray(path).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, path in enumerate(paths)])
+    da = da.mean(dim='case')
+    da.to_netcdf()
 
 
 if __name__ == "__main__":
