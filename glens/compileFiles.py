@@ -62,4 +62,4 @@ def cropFiles(region):
 
 
 if __name__ == "__main__":
-    cropFiles('SoAs')
+    cropFiles('WeAf')
