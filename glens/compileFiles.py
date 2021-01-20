@@ -4,6 +4,7 @@ from glob import glob
 import matplotlib
 import matplotlib.pyplot as plt
 
+
 def compileFiles(n, prefix, filedir):
     n_member = str(n).zfill(3)
     print(n_member)
@@ -20,32 +21,31 @@ def compileFiles(n, prefix, filedir):
     print('ARRAY SAVED\n')
     return True
 
+
 def compileFeedback(n):
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.'
     filedir = '/glade/work/hayness/glens/feedback'
     return compileFiles(n, prefix, filedir)
+
 
 def compileControl(n):
     prefix = 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.'
     filedir = '/glade/collections/glens/Control/atm/proc/tseries/daily/PRECT'
     return compileFiles(n, prefix, filedir)
 
-def loadAndShift(filename):
-    print('Loading')
-    da = xr.open_dataarray(filename)
-    da = da.assign_coords(lon=(((da.lon + 180) % 360) - 180))
-    da = da.sortby(da.lon)
-    return da
 
-def cropRegion(filename, region, lats=None, lons=None):
+def cropRegion(da, region, lats=None, lons=None):
     coords = {'SoAs':[(-10, 40), (40, 140)], 'WeAf':[(-20, 20), (20, 20)]}
     if (lats==None) & (lons==None):
         lats, lons = coords[region]
-    print('Loading')
-    da = loadAndShift(filename)
-    print('Cropping')
+    print('Load + Shift')
+    da = da.assign_coords(lon=(((da.lon + 180) % 360) - 180))
+    da = da.sortby(da.lon)
+    print('Crop')
     da = da.sel(lat=slice(lats[0], lats[1]), lon=slice(lons[0], lons[1]))  # Select the region
     return da
+
+
 
 if __name__ == "__main__":
     for i in range (14,21):
