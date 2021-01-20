@@ -54,7 +54,8 @@ def cropFiles(region):
                     'b.e15.B5505C5WCCML45BGCR.f09_g16.control.012.PRECT.20100101-20301231.nc',
                     'b.e15.B5505C5WCCML45BGCR.f09_g16.control.016.PRECT.20100101-20301231.nc',
                     'b.e15.B5505C5WCCML45BGCR.f09_g16.control.017.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.PRECT.20200101-20991231.nc']
+                    'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.PRECT.20200101-20991231.nc',
+                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.008.PRECT.20100101-20301231.nc']
     for filename in filenames:
         if filename not in already_done:
             print('Loading:')
