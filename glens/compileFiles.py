@@ -63,6 +63,8 @@ def cropFiles(region):
 
 
 def getEnsembleMean(scen, region=None):
+    print(scen)
+    print(region)
     filedir = '/glade/work/hayness/glens/custom'
     con_files = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.001.PRECT.20100101-20990630.',
                  'b.e15.B5505C5WCCML45BGCR.f09_g16.control.002.PRECT.20100101-20980811.',
@@ -111,8 +113,12 @@ def getEnsembleMean(scen, region=None):
         savename = '{0}nc'.format(savename)
     filenames = ['{0}/{1}'.format(filedir, name) for name in filenames]
     savename  = '{0}/{1}'.format(filedir, savename)
+    print('Loading:')
     da = xr.merge([xr.open_dataarray(name).sel(time=slice(start, end)).expand_dims({'case': np.arange(i, i + 1)}) for i, name in enumerate(filenames)])
+    print('Saving:')
+    print(savename)
     da.to_netcdf(savename)
+    print('Saved! \n')
 
 
 if __name__ == "__main__":
