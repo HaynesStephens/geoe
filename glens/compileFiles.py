@@ -62,7 +62,7 @@ def cropFiles(region):
         print('Saved! \n')
 
 
-def getEnsembleMean(case, region=None):
+def getEnsembleMean(scen, region=None):
     con_files = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.001.PRECT.20100101-20990630.',
                  'b.e15.B5505C5WCCML45BGCR.f09_g16.control.002.PRECT.20100101-20980811.',
                  'b.e15.B5505C5WCCML45BGCR.f09_g16.control.003.PRECT.20100101-21000630.',
@@ -98,9 +98,9 @@ def getEnsembleMean(case, region=None):
     savename_dict = {'control': 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.ensemble.PRECT.20100101-20301231.',
                      'rcp': 'b.e15.B5505C5WCCML45BGCR.f09_g16.control.ensemble.PRECT.20100101-21000630.',
                      'feedback': 'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.ensemble.PRECT.20200101-20991231.'}
-    filenames = file_dict[case]
-    start, end = year_dict[case]
-    savename = savename_dict[case]
+    filenames = file_dict[scen]
+    start, end = year_dict[scen]
+    savename = savename_dict[scen]
     if region != None:
         filenames = ['{0}{1}.nc'.format(name, region) for name in filenames]
         savename = '{0}{1}.nc'.format(savename, region)
