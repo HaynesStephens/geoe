@@ -99,7 +99,8 @@ output crop yields and crop area
 import xarray as xr
 
 # Step 1
-filename = ''
+filedir = '/glade/work/hayness/g6'
+filename = filedir + '/b.e21.BWSSP245cmip6.f09_g17.CMIP6-SSP2-4.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD.201501-206412.nc'
 ds = xr.open_dataset(filename)
 grain = ds.GRAINC_TO_FOOD
 pfts1d_ixy = ds.pfts1d_ixy
