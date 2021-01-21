@@ -113,5 +113,5 @@ landfrac = ds.landfrac
 landarea = area * landfrac
 grain = grain.expand_dims({'lat':pfts1d_jxy.values, 'lon':pfts1d_ixy.values})
 
-grainAnn = grain.resample(time='1M').mean() * ((60*60*24*30*0.85*10)/(1000*0.45))
-grainAnn.attrs["units"] = "ton/ha/yr"
+grain = grain.resample(time='1M').mean() * ((60*60*24*30*0.85*10)/(1000*0.45))
+grain.attrs["units"] = "ton/ha/yr"
