@@ -96,3 +96,8 @@ sugarcaneirr 53
 
 output crop yields and crop area
 """
+import xarray as xr
+
+# Step 1
+filename = ''
+ds = xr.open_dataset(filename)
