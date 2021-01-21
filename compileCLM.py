@@ -101,3 +101,10 @@ import xarray as xr
 # Step 1
 filename = ''
 ds = xr.open_dataset(filename)
+grain = ds.GRAINC_TO_FOOD
+pfts1d_ixy = ds.pfts1d_ixy
+pfts1d_jxy = ds.pfts1d_jxy
+pfts1d_wtgcell = ds.pfts1d_wtgcell
+area = ds.area
+landfrac = ds.landfrac
+landarea = area * landfrac
