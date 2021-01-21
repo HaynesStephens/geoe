@@ -97,6 +97,8 @@ sugarcaneirr 53
 output crop yields and crop area
 """
 import xarray as xr
+import numpy as np
+import pandas as pd
 
 # Step 1
 filedir = '/glade/work/hayness/g6'
