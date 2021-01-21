@@ -50,20 +50,7 @@ def cropRegion(da, region, lats=None, lons=None):
 def cropFiles(region):
     filedir = '/glade/work/hayness/glens/custom'
     filenames = sorted(glob('{0}/*.nc'.format(filedir)))
-    already_done = ['b.e15.B5505C5WCCML45BGCR.f09_g16.control.001.PRECT.20100101-20990630.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.002.PRECT.20100101-20980811.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.003.PRECT.20100101-21000630.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.004.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.005.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.006.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.007.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.008.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.009.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.010.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.012.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.016.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.control.017.PRECT.20100101-20301231.nc',
-                    'b.e15.B5505C5WCCML45BGCR.f09_g16.feedback.001.PRECT.20200101-20991231.nc']
+    already_done = []
     for filename in filenames:
         if filename.split('/')[-1] not in already_done:
             print('Loading:')
