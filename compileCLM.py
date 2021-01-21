@@ -115,3 +115,9 @@ grain = grain.expand_dims({'lat':pfts1d_jxy.values, 'lon':pfts1d_ixy.values})
 
 grain = grain.resample(time='1M').mean() * ((60*60*24*30*0.85*10)/(1000*0.45))
 grain.attrs["units"] = "ton/ha/yr"
+
+# Step 2
+landsurffile = '/glade/p/univ/urtg0006/Yaqiong/surfdata_0.9x1.25_78pfts_CMIP6_simyr1850_c170824_ggcmi.nc'
+ds = xr.open_dataset(landsurffile)
+pct_cft = ds.PCT_CFT
+pct_crop = ds.PCT_CROP
