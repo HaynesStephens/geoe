@@ -249,6 +249,8 @@ def Step3(yield_cft, save_name):
 #     STEP 1    #
 #################
 
+load_path = '/glade/work/hayness/clm/grainc/'
+
 grainc_names = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.20C.001.clm2.h1.GRAINC_TO_FOOD',
