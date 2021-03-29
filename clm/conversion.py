@@ -143,7 +143,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
 
     if save_file:
         # Save filled-in array as is
-        grain4d.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name.replace('GRAINC_TO_FOOD', 'yield_latlon')))
+        grain4d.to_netcdf(savedir + '/HAYNES.{0}'.format(save_name.replace('GRAINC_TO_FOOD', 'yield_latlon')))
 
     return grain4d, land_area
 
