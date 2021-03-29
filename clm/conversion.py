@@ -130,7 +130,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
     grain4d = xr.DataArray(dims=dims, coords=coords)
 
     # Run for loop over 1D array to fill in 4D array
-    for pft in :grainc.pft.values
+    for pft in grainc.pft.values:
         if (pfts1d_wtgcell.isel(pft=pft) > 0.0):
             veg = int(pfts1d_itype_veg.isel(pft=pft).values.item())
             lat = int(pfts1d_jxy.isel(pft=pft).values.item() - 1)
