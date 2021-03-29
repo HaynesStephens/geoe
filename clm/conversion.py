@@ -272,5 +272,5 @@ for grainc_name, year in zip(grainc_names, years):
     start_date, end_date = year
     save_name = '{0}.{1}-{2}.nc'.format(grainc_name.replace('GRAINC_TO_FOOD', 'yield_latlon'), start_date, end_date)
     print(grainc, start_date, end_date)
-    # grain4d, land_area = Step1(grainc, start_date, end_date, save_name, save_file=True)
+    grain4d, land_area = Step1(grainc, start_date, end_date, save_name, save_file=True)
 
