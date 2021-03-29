@@ -259,7 +259,8 @@ grainc_names = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h
 
 years = [['2040', '2100'],
          ['2040', '2100'],
-         ['2033', '2099']]
+         ['2033', '2099'],
+         ['']]
 
 for grainc_name in grainc_names:
     grainc = xr.open_mfdataset(grainc_name+'*.nc')['GRAINC_TO_FOOD']
