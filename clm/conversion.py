@@ -116,7 +116,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
     pfts1d_itype_veg = grainc.pfts1d_itype_veg
     area = grainc.area
     landfrac = grainc.landfrac
-    landarea = area * landfrac
+    land_area = area * landfrac
 
     # Assign PFT coordinate to veg-type data
     pfts1d_itype_veg = pfts1d_itype_veg.assign_coords(pft=pfts1d_itype_veg.pft)
@@ -145,10 +145,11 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
         # Save filled-in array as is
         grain4d.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name.replace('GRAINC_TO_FOOD', 'yield_latlon')))
 
-    return grain4d
+    return grain4d, land_area
 
 
-def Step2(surf_data, grain4d, save_name):
+def Step2(surf_data, grain4d, land_area, save_name):
+    savedir = '/glade/work/hayness/clm/step2'
     pct_crop = surf_data.PCT_CROP
     pct_cft = surf_data.PCT_CFT
 
@@ -168,7 +169,7 @@ def Step2(surf_data, grain4d, save_name):
     # For loop to create new file
     for crop_id in cft_coord:
         area_OUT.loc[dict(cft=crop_id)] = (pct_cft.sel(cft=crop_id + 15) / 100).values * (
-                    pct_crop / 100).values * landarea.values
+                    pct_crop / 100).values * land_area.values
         yield_OUT.loc[dict(cft=crop_id)] = grain4d.sel(pft=crop_id + 15)
 
     # Merge arrays to dataset and save
@@ -179,6 +180,7 @@ def Step2(surf_data, grain4d, save_name):
 
 
 def Step3(yield_cft, save_name):
+    savedir = '/glade/work/hayness/clm/step3'
     # (one is tropical, the other is temperate)
     crops_tot = {
         'corn': [2, 3, 60, 61],
