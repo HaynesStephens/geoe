@@ -143,7 +143,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
 
     if save_file:
         # Save filled-in array as is
-        grain4d.to_netcdf(savedir + '/HAYNES.{0}'.format(save_name.replace('GRAINC_TO_FOOD', 'yield_latlon')))
+        grain4d.to_netcdf(savedir + '/HAYNES.{0}'.format(save_name))
 
     return grain4d, land_area
 
@@ -265,7 +265,9 @@ years = [['2040', '2100'],
          ['2015', '2100'],
          ['2019', '2100']]
 
-for grainc_name in grainc_names:
+for grainc_name, year in zip(grainc_names, years):
     grainc = xr.open_mfdataset(grainc_name+'*.nc')['GRAINC_TO_FOOD']
+    start_date, end_date = year
+    save_name = '{0}.{1}-{2}.nc'.format(grainc_name.replace('GRAINC_TO_FOOD', 'yield_latlon'), start_date, end_date)
     Step1(grainc, start_date, end_date, save_name, save_file=True)
 
