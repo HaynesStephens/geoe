@@ -105,7 +105,8 @@ output crop yields and crop area
 """
 
 
-def Step1(grainc, start_date, end_date, save_name, save_type=None):
+def Step1(grainc, start_date, end_date, save_name, save_file=True):
+    savedir = '/glade/work/hayness/clm/step1'
     grain = grainc.GRAINC_TO_FOOD
     grain = grain.assign_coords(time=pd.date_range(start=start_date, end=end_date, freq='1M'))
 
@@ -140,30 +141,11 @@ def Step1(grainc, start_date, end_date, save_name, save_type=None):
     grain4d = grain4d * ((60 * 60 * 24 * 30 * 0.85 * 10) / (1000 * 0.45))
     grain4d.attrs["units"] = "ton/ha/yr"
 
-    save_list = []
-    if (save_type == 'total') or (save_type == 'all'):
+    if save_file:
         # Save filled-in array as is
-        grain4d.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name))
-        save_list.append(grain4d)
+        grain4d.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name.replace('GRAINC_TO_FOOD', 'yield_latlon')))
 
-    if (save_type == 'veg-trim') or (save_type == 'all'):
-        # Save filled-in array with only the veg-types considered (cut out the zeros)
-        grain4dveg = grain4d.sel(pft=np.unique(pfts1d_itype_veg))
-        grain4dveg = grain4dveg.sortby(grain4dveg.pft)
-        grain4dveg.to_netcdf(savedir + '/HAYNES.VEGTRIM.{0}.nc'.format(save_name))
-        save_list.append(grain4dveg)
-
-    if (save_type == 'veg-trim-lon-shift') or (save_type == 'all'):
-        # Save filled-in array with only veg-types considered AND sorted by longitude (-180 to 180)
-        grain4dveglon = grain4d.sel(pft=np.unique(pfts1d_itype_veg))
-        grain4dveglon = grain4dveglon.assign_coords(lon=(((grain4dveglon.lon + 180) % 360) - 180))
-        grain4dveglon = grain4dveglon.sortby(grain4dveglon.lon)
-        grain4dveglon = grain4dveglon.sortby(grain4dveglon.pft)
-        grain4dveglon.to_netcdf(savedir + '/HAYNES.VEGTRIM.LON.{0}.nc'.format(save_name))
-        save_list.append(grain4dveglon)
-
-    print('Compiled grain file saved.')
-    return save_list
+    return grain4d
 
 
 def Step2(surf_data, grain4d, save_name):
@@ -259,3 +241,16 @@ def Step3(yield_cft, save_name):
     yield_crop.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name))
 
     return yield_crop
+
+
+#################
+#     STEP 1    #
+#################
+
+file_paths = ['SSP585',
+              'SSP585-feedback-1.5',
+              'SSP534-OS',
+              'SSP534-OS-feedback-1.5',
+              'SSP534-OS-feedback-2.0',
+              'G6solar',
+              'G6sulfur']
