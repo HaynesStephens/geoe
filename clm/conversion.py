@@ -249,10 +249,10 @@ def Step3(yield_cft, save_name):
 #     STEP 1    #
 #################
 
-file_paths = ['SSP585',
-              'SSP585-feedback-1.5',
-              'SSP534-OS',
-              'SSP534-OS-feedback-1.5',
-              'SSP534-OS-feedback-2.0',
-              'G6solar',
-              'G6sulfur']
+file_paths = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+              'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
+              'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.20C.001.clm2.h1.GRAINC_TO_FOOD',
+              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
+              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6solar-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6sulfur-WACCM.001.clm2.h1.GRAINC_TO_FOOD']
