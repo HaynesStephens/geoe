@@ -1,3 +1,10 @@
+# Import the necessary libraries
+import os
+from glob import glob
+import numpy as np
+import pandas as pd
+import xarray as xr
+
 """
 =============================================
 How to process CLM5crop output to crop yield
@@ -96,28 +103,159 @@ sugarcaneirr 53
 
 output crop yields and crop area
 """
-import xarray as xr
-import numpy as np
-import pandas as pd
 
-# Step 1
-filedir = '/glade/work/hayness/g6'
-filename = filedir + '/b.e21.BWSSP245cmip6.f09_g17.CMIP6-SSP2-4.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD.201501-206412.nc'
-ds = xr.open_dataset(filename)
-grain = ds.GRAINC_TO_FOOD
-pfts1d_ixy = ds.pfts1d_ixy
-pfts1d_jxy = ds.pfts1d_jxy
-pfts1d_wtgcell = ds.pfts1d_wtgcell
-area = ds.area
-landfrac = ds.landfrac
-landarea = area * landfrac
-# grain = grain.expand_dims({'lat':pfts1d_jxy.values, 'lon':pfts1d_ixy.values})
 
-# grain = grain.resample(time='1M').mean() * ((60*60*24*30*0.85*10)/(1000*0.45))
-# grain.attrs["units"] = "ton/ha/yr"
-#
-# # Step 2
-# landsurffile = '/glade/p/univ/urtg0006/Yaqiong/surfdata_0.9x1.25_78pfts_CMIP6_simyr1850_c170824_ggcmi.nc'
-# ds = xr.open_dataset(landsurffile)
-# pct_cft = ds.PCT_CFT
-# pct_crop = ds.PCT_CROP
+def Step1(grainc, start_date, end_date, save_name, save_type=None):
+    grain = grainc.GRAINC_TO_FOOD
+    grain = grain.assign_coords(time=pd.date_range(start=start_date, end=end_date, freq='1M'))
+
+    pfts1d_ixy = grainc.pfts1d_ixy
+    pfts1d_jxy = grainc.pfts1d_jxy
+    pfts1d_wtgcell = grainc.pfts1d_wtgcell
+    pfts1d_itype_veg = grainc.pfts1d_itype_veg
+    area = grainc.area
+    landfrac = grainc.landfrac
+    landarea = area * landfrac
+
+    # Assign PFT coordinate to veg-type data
+    pfts1d_itype_veg = pfts1d_itype_veg.assign_coords(pft=pfts1d_itype_veg.pft)
+
+    # Resample grain to yearly sums
+    grain = grain.resample(time='1A').sum()
+
+    # Create empty 4D array to construct from 1D GRAINC array
+    dims = ['time', 'pft', 'lat', 'lon']
+    coords = {'time': grain.time, 'pft': np.arange(pfts1d_itype_veg.max() + 1), 'lat': grainc.lat, 'lon': grainc.lon}
+    grain4d = xr.DataArray(dims=dims, coords=coords)
+
+    # Run for loop over 1D array to fill in 4D array
+    for pft in grainc.pft.values:
+        if (pfts1d_wtgcell.isel(pft=pft) > 0.0):
+            veg = int(pfts1d_itype_veg.isel(pft=pft).item())
+            lat = int(pfts1d_jxy.isel(pft=pft).item() - 1)
+            lon = int(pfts1d_ixy.isel(pft=pft).item() - 1)
+            grain4d[dict(pft=veg, lat=lat, lon=lon)] = grain.sel(pft=pft)
+
+    # Change units to ton/ha
+    grain4d = grain4d * ((60 * 60 * 24 * 30 * 0.85 * 10) / (1000 * 0.45))
+    grain4d.attrs["units"] = "ton/ha/yr"
+
+    save_list = []
+    if (save_type == 'total') or (save_type == 'all'):
+        # Save filled-in array as is
+        grain4d.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name))
+        save_list.append(grain4d)
+
+    if (save_type == 'veg-trim') or (save_type == 'all'):
+        # Save filled-in array with only the veg-types considered (cut out the zeros)
+        grain4dveg = grain4d.sel(pft=np.unique(pfts1d_itype_veg))
+        grain4dveg = grain4dveg.sortby(grain4dveg.pft)
+        grain4dveg.to_netcdf(savedir + '/HAYNES.VEGTRIM.{0}.nc'.format(save_name))
+        save_list.append(grain4dveg)
+
+    if (save_type == 'veg-trim-lon-shift') or (save_type == 'all'):
+        # Save filled-in array with only veg-types considered AND sorted by longitude (-180 to 180)
+        grain4dveglon = grain4d.sel(pft=np.unique(pfts1d_itype_veg))
+        grain4dveglon = grain4dveglon.assign_coords(lon=(((grain4dveglon.lon + 180) % 360) - 180))
+        grain4dveglon = grain4dveglon.sortby(grain4dveglon.lon)
+        grain4dveglon = grain4dveglon.sortby(grain4dveglon.pft)
+        grain4dveglon.to_netcdf(savedir + '/HAYNES.VEGTRIM.LON.{0}.nc'.format(save_name))
+        save_list.append(grain4dveglon)
+
+    print('Compiled grain file saved.')
+    return save_list
+
+
+def Step2(surf_data, grain4d, save_name):
+    pct_crop = surf_data.PCT_CROP
+    pct_cft = surf_data.PCT_CFT
+
+    # Create empty 4D array to construct YIELD_OUT by CROP
+    dims = ['cft', 'time', 'lat', 'lon']
+    cft_coord = pct_cft.cft - 15.0
+    coords = {'time': grain4d.time, 'cft': cft_coord, 'lat': grain4d.lat, 'lon': grain4d.lon}
+    yield_OUT = xr.DataArray(dims=dims, coords=coords).rename('yield')
+    yield_OUT.attrs["units"] = "ton/ha/yr"
+
+    # Create empty 3D array to construct AREA_OUT by CROP
+    dims = ['cft', 'lat', 'lon']
+    coords = {'cft': cft_coord, 'lat': grain4d.lat, 'lon': grain4d.lon}
+    area_OUT = xr.DataArray(dims=dims, coords=coords).rename('area')
+    area_OUT.attrs["units"] = "km^2"
+
+    # For loop to create new file
+    for crop_id in cft_coord:
+        area_OUT.loc[dict(cft=crop_id)] = (pct_cft.sel(cft=crop_id + 15) / 100).values * (
+                    pct_crop / 100).values * landarea.values
+        yield_OUT.loc[dict(cft=crop_id)] = grain4d.sel(pft=crop_id + 15)
+
+    # Merge arrays to dataset and save
+    yield_cft = xr.merge([yield_OUT, area_OUT])
+    yield_cft['yield'] = yield_cft['yield'].where(yield_cft['area'] > 0)
+    yield_cft.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name))
+    return yield_cft
+
+
+def Step3(yield_cft, save_name):
+    # (one is tropical, the other is temperate)
+    crops_tot = {
+        'corn': [2, 3, 60, 61],
+        'cornrain': [2, 60],
+        'cornirr': [3, 61],
+        'rice': [46, 47],
+        'ricerain': [46],
+        'riceirr': [47],
+        'soy': [8, 9, 62, 63],
+        'soyrain': [8, 62],
+        'soyirr': [9, 63],
+        'springwheat': [4, 5],
+        'springwheatrain': [4],
+        'springwheatirr': [5],
+        'cotton': [26, 27],
+        'cottonrain': [26],
+        'cottonirr': [27],
+        'sugar': [52, 53],
+        'sugarcanerain': [52],
+        'sugarcaneirr': [53]
+    }
+
+    # Create empty 4D array to construct YIELD_OUT by CROP
+    dims = ['crops', 'time', 'lat', 'lon']
+    coords = {'time': yield_cft.time, 'crops': np.arange(0, 18, 1.0), 'lat': yield_cft.lat, 'lon': yield_cft.lon}
+    yield_OUT_crop = xr.DataArray(dims=dims, coords=coords).rename('yield')
+    yield_OUT_crop.attrs["units"] = "ton/ha/yr"
+
+    # Create empty 3D array to construct AREA_OUT by CROP
+    dims = ['crops', 'lat', 'lon']
+    coords = {'crops': np.arange(0, 18, 1.0), 'lat': yield_cft.lat, 'lon': yield_cft.lon}
+    area_OUT_crop = xr.DataArray(dims=dims, coords=coords).rename('area')
+    area_OUT_crop.attrs["units"] = "km^2"
+
+    for i, crop in enumerate(crops_tot):
+        if i % 3 != 0:
+            print(crop)
+            IDs = crops_tot[crop]
+            IDs = [id for id in IDs]
+            subset = yield_cft.sel(cft=IDs)
+            yields = subset['yield']
+            area = subset['area']
+            yields = yields.where(area > 0).sum(dim='cft', min_count=1)
+            area = area.sum(dim='cft', min_count=1)
+            yield_OUT_crop.loc[dict(crops=i)] = yields
+            area_OUT_crop.loc[dict(crops=i)] = area
+
+    for i, crop in enumerate(crops_tot):
+        if i % 3 == 0:
+            print(crop)
+            yields = yield_OUT_crop.sel(crops=[i + 1, i + 2])
+            area = area_OUT_crop.sel(crops=[i + 1, i + 2])
+            yields = (yields * area).sum(dim='crops', min_count=1)
+            area = area.sum(dim='crops', min_count=1)
+            yields = yields / area
+            yield_OUT_crop.loc[dict(crops=i)] = yields
+            area_OUT_crop.loc[dict(crops=i)] = area
+
+    yield_crop = xr.merge([yield_OUT_crop, area_OUT_crop])
+    yield_crop.to_netcdf(savedir + '/HAYNES.{0}.nc'.format(save_name))
+
+    return yield_crop
