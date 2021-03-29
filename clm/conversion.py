@@ -108,7 +108,7 @@ output crop yields and crop area
 def Step1(grainc, start_date, end_date, save_name, save_file=True):
     savedir = '/glade/work/hayness/clm/step1'
     grain = grainc.GRAINC_TO_FOOD
-    grain = grain.assign_coords(time=pd.date_range(start=start_date, end=end_date, freq='1M'))
+    grain = grain.assign_coords(time=pd.date_range(start=start_date, end=str(int(end_date)+1), freq='1M'))
 
     pfts1d_ixy = grainc.pfts1d_ixy
     pfts1d_jxy = grainc.pfts1d_jxy
@@ -252,15 +252,18 @@ def Step3(yield_cft, save_name):
 grainc_names = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.20C.001.clm2.h1.GRAINC_TO_FOOD',
-                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
-                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6solar-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
-                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6sulfur-WACCM.001.clm2.h1.GRAINC_TO_FOOD']
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6sulfur-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD']
 
 years = [['2040', '2100'],
          ['2040', '2100'],
          ['2033', '2099'],
-         ['']]
+         ['2019', '2100'],
+         ['2020', '2100'],
+         ['2015', '2100'],
+         ['2019', '2100']]
 
 for grainc_name in grainc_names:
     grainc = xr.open_mfdataset(grainc_name+'*.nc')['GRAINC_TO_FOOD']
