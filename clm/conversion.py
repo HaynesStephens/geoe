@@ -249,7 +249,7 @@ def Step3(yield_cft, save_name):
 #     STEP 1    #
 #################
 
-load_path = '/glade/work/hayness/clm/grainc/'
+load_path = '/glade/work/hayness/clm/grainc'
 
 grainc_names = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
@@ -268,7 +268,7 @@ years = [['2040', '2100'],
          ['2019', '2100']]
 
 for grainc_name, year in zip(grainc_names, years):
-    grainc = xr.open_mfdataset(grainc_name+'*.nc')['GRAINC_TO_FOOD']
+    grainc = xr.open_mfdataset('{0}/{1}*.nc'.format(load_path, grainc_name))['GRAINC_TO_FOOD']
     start_date, end_date = year
     save_name = '{0}.{1}-{2}.nc'.format(grainc_name.replace('GRAINC_TO_FOOD', 'yield_latlon'), start_date, end_date)
     # grain4d, land_area = Step1(grainc, start_date, end_date, save_name, save_file=True)
