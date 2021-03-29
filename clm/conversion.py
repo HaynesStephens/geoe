@@ -268,9 +268,9 @@ years = [['2040', '2100'],
          ['2019', '2100']]
 
 for grainc_name, year in zip(grainc_names, years):
-    grainc = xr.open_mfdataset('{0}/{1}*.nc'.format(load_path, grainc_name))['GRAINC_TO_FOOD']
+    grainc = xr.open_mfdataset('{0}/{1}*.nc'.format(load_path, grainc_name))
     start_date, end_date = year
     save_name = '{0}.{1}-{2}.nc'.format(grainc_name.replace('GRAINC_TO_FOOD', 'yield_latlon'), start_date, end_date)
     print(save_name)
-    grain4d, land_area = Step1(grainc, start_date, end_date, save_name, save_file=True)
+    # grain4d, land_area = Step1(grainc, start_date, end_date, save_name, save_file=True)
 
