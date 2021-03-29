@@ -249,10 +249,15 @@ def Step3(yield_cft, save_name):
 #     STEP 1    #
 #################
 
-file_paths = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
-              'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
-              'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.20C.001.clm2.h1.GRAINC_TO_FOOD',
-              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
-              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
-              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6solar-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
-              'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6sulfur-WACCM.001.clm2.h1.GRAINC_TO_FOOD']
+grainc_names = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.feedback.20C.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6solar-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6sulfur-WACCM.001.clm2.h1.GRAINC_TO_FOOD']
+
+for grainc_name in grainc_names:
+    grainc = xr.open_mfdataset(grainc_name+'*.nc')['GRAINC_TO_FOOD']
+    Step1(grainc, start_date, end_date, save_name, save_file=True)
+
