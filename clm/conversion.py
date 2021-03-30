@@ -129,6 +129,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
     coords = {'time': grain.time, 'pft': np.arange(pfts1d_itype_veg.max() + 1), 'lat': grainc.lat, 'lon': grainc.lon}
     grain4d = xr.DataArray(dims=dims, coords=coords)
 
+    print('Building 4D array')
     # Run for loop over 1D array to fill in 4D array
     for pft in grainc.pft.values:
         if (pfts1d_wtgcell.isel(pft=pft) > 0.0):
@@ -137,6 +138,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
             lon = int(pfts1d_ixy.isel(pft=pft).values.item() - 1)
             grain4d[dict(pft=veg, lat=lat, lon=lon)] = grain.sel(pft=pft)
 
+    print('4D array BUILT.')
     # Change units to ton/ha
     grain4d = grain4d * ((60 * 60 * 24 * 30 * 0.85 * 10) / (1000 * 0.45))
     grain4d.attrs["units"] = "ton/ha/yr"
@@ -144,6 +146,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file=True):
     if save_file:
         # Save filled-in array as is
         grain4d.to_netcdf(savedir + '/HAYNES.{0}'.format(save_name))
+        print('4D yield array SAVED.')
 
     return grain4d, land_area
 
@@ -270,7 +273,10 @@ years = [['2040', '2100'],
 for grainc_name, year in zip(grainc_names, years):
     print(grainc_name)
     grainc = xr.open_mfdataset('{0}/{1}*.nc'.format(load_path, grainc_name))
+    print(grainc)
     start_date, end_date = year
     save_name = '{0}.{1}-{2}.nc'.format(grainc_name.replace('GRAINC_TO_FOOD', 'yield_latlon'), start_date, end_date)
+    print(save_name)
+    print('\n')
     # grain4d, land_area = Step1(grainc, start_date, end_date, save_name, save_file=True)
 
