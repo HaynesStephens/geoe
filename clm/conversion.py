@@ -260,7 +260,7 @@ grainc_names = ['b.e21.BWSSP534oscmip6.f09_g17.CMIP6-SSP5-3.4OS-WACCM.001.clm2.h
                 # 'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6solar-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
                 # 'b.e21.BWSSP585cmip6.f09_g17.CMIP6-G6sulfur-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
                 'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.001.clm2.h1.GRAINC_TO_FOOD',
-                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD']
+                'b.e21.BWSSP585cmip6.f09_g17.CMIP6-SSP5-8.5-WACCM.feedback.15C.001.clm2.h1.GRAINC_TO_FOOD'][:1]
 
 years = [['2040', '2100'],
          ['2040', '2100'],
@@ -268,7 +268,7 @@ years = [['2040', '2100'],
          # ['2019', '2100'],
          # ['2020', '2100'],
          ['2015', '2100'],
-         ['2019', '2100']]
+         ['2019', '2100']][:1]
 
 for grainc_name, year in zip(grainc_names, years):
     print(grainc_name)
