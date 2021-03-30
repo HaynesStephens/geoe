@@ -273,7 +273,6 @@ years = [['2040', '2100'],
 for grainc_name, year in zip(grainc_names, years):
     print(grainc_name)
     grainc = xr.open_mfdataset('{0}/{1}*.nc'.format(load_path, grainc_name))
-    print(grainc)
     start_date, end_date = year
     save_name = '{0}.{1}-{2}.nc'.format(grainc_name.replace('GRAINC_TO_FOOD', 'yield_latlon'), start_date, end_date)
     print(save_name)
