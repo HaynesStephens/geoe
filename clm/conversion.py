@@ -133,6 +133,7 @@ def Step1(grainc, start_date, end_date, save_name, save_file):
     max_pft = grainc.pft.max().values.item()
     # Run for loop over 1D array to fill in 4D array
     for pft in grainc.pft.values:
+        os.system('cls')
         print('{0} / {1}'.format(pft, max_pft))
         if (pfts1d_wtgcell.isel(pft=pft) > 0.0):
             veg = int(pfts1d_itype_veg.isel(pft=pft).values.item())
