@@ -132,8 +132,8 @@ def Step1(grainc, start_date, end_date, save_name, save_file):
     print('Building 4D array')
     # Run for loop over 1D array to fill in 4D array
     for pft in grainc.pft.values:
+        print(pft)
         if (pfts1d_wtgcell.isel(pft=pft) > 0.0):
-            print(pft)
             veg = int(pfts1d_itype_veg.isel(pft=pft).values.item())
             lat = int(pfts1d_jxy.isel(pft=pft).values.item() - 1)
             lon = int(pfts1d_ixy.isel(pft=pft).values.item() - 1)
