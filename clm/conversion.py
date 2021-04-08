@@ -106,7 +106,7 @@ output crop yields and crop area
 
 
 def Step1(grainc, start_date, end_date, save_name, save_file):
-    savedir = '/glade/work/hayness/clm/step1'
+    savedir = ''/glade/work/hayness/clm/step1
     grain = grainc.GRAINC_TO_FOOD
     grain = grain.assign_coords(time=pd.date_range(start=start_date, end=str(int(end_date)+1), freq='1M'))
 
